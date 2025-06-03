@@ -7,14 +7,17 @@ WORKDIR /usr/src/app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Install ALL dependencies (including devDependencies)
+RUN npm install --verbose
 
 # Copy source code
 COPY . .
 
 # Build TypeScript code
 RUN npm run build
+
+# Remove devDependencies to reduce image size
+RUN npm prune --production
 
 # Expose port
 EXPOSE 5000
